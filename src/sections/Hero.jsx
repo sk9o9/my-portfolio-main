@@ -103,7 +103,7 @@ const Hero = () => {
         {/* Social Links */}
         <div className="flex justify-center gap-6 mt-8">
           <a 
-            href="https://github.com/sk909" 
+            href="https://github.com/sk9o9" 
             target="_blank" 
             rel="noopener noreferrer"
             className="w-12 h-12 bg-white rounded-full shadow-md hover:shadow-lg flex items-center justify-center transform hover:scale-110 transition-all duration-300"
@@ -113,7 +113,7 @@ const Hero = () => {
             </svg>
           </a>
           <a 
-            href="https://www.linkedin.com/in/sumitkhadka" 
+            href="https://www.linkedin.com/in/sumit9o9/" 
             target="_blank" 
             rel="noopener noreferrer"
             className="w-12 h-12 bg-white rounded-full shadow-md hover:shadow-lg flex items-center justify-center transform hover:scale-110 transition-all duration-300"

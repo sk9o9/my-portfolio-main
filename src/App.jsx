@@ -6,12 +6,12 @@ import About from './sections/About';
 import Skills from './sections/Skills';
 import Projects from './sections/Projects';
 import Contact from './sections/Contact';
-import MusicPlayer from './components/MusicPlayer';
+// import MusicPlayer from './components/MusicPlayer';
 
 function App() {
   return (
     <div className="bg-white min-h-screen flex flex-col">
-      <MusicPlayer />
+      {/* <MusicPlayer /> */}
       <Navbar />
       <main className="flex-1">
         <Hero />
