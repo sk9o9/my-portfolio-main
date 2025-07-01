@@ -3,8 +3,11 @@ import Button from '../components/Button';
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [currentRole, setCurrentRole] = useState(0);
-  
+  const [displayText, setDisplayText] = useState('');
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const roles = [
     'Full-Stack Developer',
     'React Developer', 
@@ -12,13 +15,37 @@ const Hero = () => {
     'Problem Solver'
   ];
 
+  const prefix = 'A Passionate ';
+
   useEffect(() => {
     setIsVisible(true);
-    const interval = setInterval(() => {
-      setCurrentRole((prev) => (prev + 1) % roles.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+    const typingSpeed = isDeleting ? 50 : 100;
+    const pauseTime = 1000;
+
+    const handleTyping = () => {
+      const fullText = roles[roleIndex];
+
+      if (!isDeleting) {
+        setDisplayText(fullText.substring(0, charIndex + 1));
+        setCharIndex((prev) => prev + 1);
+
+        if (charIndex === fullText.length) {
+          setTimeout(() => setIsDeleting(true), pauseTime);
+        }
+      } else {
+        setDisplayText(fullText.substring(0, charIndex - 1));
+        setCharIndex((prev) => prev - 1);
+
+        if (charIndex === 0) {
+          setIsDeleting(false);
+          setRoleIndex((prev) => (prev + 1) % roles.length);
+        }
+      }
+    };
+
+    const timer = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [charIndex, isDeleting, roleIndex]);
 
   return (
     <section id="home" className="min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden">
@@ -42,9 +69,10 @@ const Hero = () => {
         
         <div className="h-16 mb-6">
           <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700">
-            A Passionate{' '}
+            {prefix}
             <span className="text-blue-600 font-bold transition-all duration-500 transform">
-              {roles[currentRole]}
+              {displayText}
+              <span className="border-r-2 border-blue-600 ml-1 animate-pulse"></span>
             </span>
           </h2>
         </div>
