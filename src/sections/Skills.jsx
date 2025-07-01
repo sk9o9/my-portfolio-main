@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { FaCode, FaPython, FaReact, FaNodeJs, FaWindows, FaApple, FaDatabase, FaEnvelope } from "react-icons/fa";
 
 const technicalSkills = [
-  { name: 'JavaScript', level: 90, icon: '⚡' },
-  { name: 'Python', level: 85, icon: '🐍' },
-  { name: 'C#', level: 80, icon: '💻' },
-  { name: 'React.js', level: 95, icon: '⚛️' },
-  { name: 'Node.js', level: 88, icon: '🟢' },
-  { name: 'Express.js', level: 85, icon: '🚀' },
-  { name: 'MongoDB', level: 82, icon: '🍃' },
-  { name: 'PostgreSQL', level: 78, icon: '🐘' },
-  { name: 'Git', level: 90, icon: '📝' },
-  { name: 'Docker', level: 75, icon: '🐳' },
-  { name: 'AWS', level: 70, icon: '☁️' },
-  { name: 'Tailwind CSS', level: 92, icon: '🎨' },
+  { name: 'JavaScript', icon: <FaCode className="text-yellow-400" />, level: 90 },
+  { name: 'Python', icon: <FaPython className="text-blue-400" />, level: 85 },
+  { name: 'C#', icon: <FaCode className="text-purple-600" />, level: 80 },
+  { name: 'React.js', icon: <FaReact className="text-cyan-400" />, level: 92 },
+  { name: 'Node.js', icon: <FaNodeJs className="text-green-600" />, level: 88 },
+  { name: 'Express.js', icon: <FaCode className="text-gray-800" />, level: 85 },
+  { name: 'MongoDB', icon: <FaDatabase className="text-green-700" />, level: 80 },
+  { name: 'Windows', icon: <FaWindows className="text-blue-500" />, level: 75 },
+  { name: 'macOS', icon: <FaApple className="text-gray-500" />, level: 70 },
+  { name: 'Postman', icon: <FaEnvelope className="text-orange-500" />, level: 80 },
 ];
 
 const softSkills = [
@@ -21,7 +20,6 @@ const softSkills = [
   { name: 'Teamwork', description: 'Collaborative development and cross-functional coordination' },
   { name: 'Time Management', description: 'Efficient project delivery and deadline management' },
   { name: 'Critical Thinking', description: 'Analytical approach to technical challenges' },
-  { name: 'Leadership', description: 'Mentoring team members and leading technical initiatives' },
 ];
 
 const SkillBar = ({ skill, isVisible, delay = 0 }) => {
@@ -43,7 +41,7 @@ const SkillBar = ({ skill, isVisible, delay = 0 }) => {
           <span className="text-xl">{skill.icon}</span>
           <span className="font-semibold text-gray-800">{skill.name}</span>
         </div>
-        <span className="text-sm font-medium text-blue-600">{skill.level}%</span>
+        <span className="text-sm font-medium text-blue-600">{animatedLevel}%</span>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
         <div 
