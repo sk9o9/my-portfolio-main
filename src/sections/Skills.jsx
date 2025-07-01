@@ -1,56 +1,202 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const technicalSkills = [
-  { name: 'JavaScript' },
-  { name: 'Python' },
-  { name: 'C#' },
-  { name: 'React.js' },
-  { name: 'Node.js' },
-  { name: 'Express.js' },
-  { name: 'MongoDB' },
-  { name: 'Windows' },
-  { name: 'macOS' },
-  { name: 'Visual Studio' },
-  { name: 'Postman' },
+  { name: 'JavaScript', level: 90, icon: '⚡' },
+  { name: 'Python', level: 85, icon: '🐍' },
+  { name: 'C#', level: 80, icon: '💻' },
+  { name: 'React.js', level: 95, icon: '⚛️' },
+  { name: 'Node.js', level: 88, icon: '🟢' },
+  { name: 'Express.js', level: 85, icon: '🚀' },
+  { name: 'MongoDB', level: 82, icon: '🍃' },
+  { name: 'PostgreSQL', level: 78, icon: '🐘' },
+  { name: 'Git', level: 90, icon: '📝' },
+  { name: 'Docker', level: 75, icon: '🐳' },
+  { name: 'AWS', level: 70, icon: '☁️' },
+  { name: 'Tailwind CSS', level: 92, icon: '🎨' },
 ];
 
 const softSkills = [
-  'Problem Solving',
-  'Communication Skills',
-  'Teamwork',
-  'Time Management',
-  'Critical Thinking',
-  'Presentation',
+  { name: 'Problem Solving', description: 'Breaking down complex problems into manageable solutions' },
+  { name: 'Communication', description: 'Clear and effective technical communication' },
+  { name: 'Teamwork', description: 'Collaborative development and cross-functional coordination' },
+  { name: 'Time Management', description: 'Efficient project delivery and deadline management' },
+  { name: 'Critical Thinking', description: 'Analytical approach to technical challenges' },
+  { name: 'Leadership', description: 'Mentoring team members and leading technical initiatives' },
 ];
 
-const Skills = () => {
+const SkillBar = ({ skill, isVisible, delay = 0 }) => {
+  const [animatedLevel, setAnimatedLevel] = useState(0);
+
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(() => {
+        setAnimatedLevel(skill.level);
+      }, delay);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, skill.level, delay]);
+
   return (
-    <section id="skills" className="py-20 px-4 bg-blue-50">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8">My Skills</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Technical Skills</h3>
-            <div className="flex flex-wrap gap-3">
-              {technicalSkills.map(skill => (
-                <span key={skill.name} className="bg-white border border-blue-200 px-4 py-2 rounded shadow text-blue-700 font-medium">
-                  {skill.name}
-                </span>
+    <div className="mb-6 transform transition-all duration-500 hover:scale-105">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <span className="text-xl">{skill.icon}</span>
+          <span className="font-semibold text-gray-800">{skill.name}</span>
+        </div>
+        <span className="text-sm font-medium text-blue-600">{skill.level}%</span>
+      </div>
+      <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+        <div 
+          className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-1000 ease-out shadow-sm"
+          style={{ width: `${animatedLevel}%` }}
+        >
+          <div className="h-full bg-white/20 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SoftSkillCard = ({ skill, isVisible, delay = 0 }) => {
+  return (
+    <div 
+      className={`bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      <div className="flex items-center mb-3">
+        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-lg mr-4">
+          {skill.name.charAt(0)}
+        </div>
+        <h4 className="font-semibold text-gray-800 text-lg">{skill.name}</h4>
+      </div>
+      <p className="text-gray-600 text-sm leading-relaxed">{skill.description}</p>
+    </div>
+  );
+};
+
+const Skills = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <section 
+      id="skills" 
+      className="py-20 px-4 bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden"
+      ref={sectionRef}
+    >
+      {/* Background decoration */}
+      <div className="absolute top-0 left-0 w-full h-full">
+        <div className="absolute top-20 right-20 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
+        <div className="absolute bottom-20 left-20 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30"></div>
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="text-center mb-16">
+          <h2 className={`text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-blue-900 bg-clip-text text-transparent transition-all duration-1000 transform ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}>
+            My Skills & Expertise
+          </h2>
+          <p className={`text-xl text-gray-600 max-w-2xl mx-auto transition-all duration-1000 transform ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`} style={{ transitionDelay: '200ms' }}>
+            A comprehensive overview of my technical skills and personal strengths
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Technical Skills */}
+          <div className={`transition-all duration-1000 transform ${
+            isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
+          }`} style={{ transitionDelay: '400ms' }}>
+            <div className="bg-white rounded-2xl p-8 shadow-xl">
+              <div className="flex items-center mb-8">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-2xl mr-4">
+                  💻
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800">Technical Skills</h3>
+              </div>
+              <div className="space-y-2">
+                {technicalSkills.map((skill, index) => (
+                  <SkillBar 
+                    key={skill.name} 
+                    skill={skill} 
+                    isVisible={isVisible}
+                    delay={index * 100}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Soft Skills */}
+          <div className={`transition-all duration-1000 transform ${
+            isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+          }`} style={{ transitionDelay: '600ms' }}>
+            <div className="mb-8">
+              <div className="flex items-center mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-white text-2xl mr-4">
+                  🧠
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800">Soft Skills</h3>
+              </div>
+            </div>
+            <div className="grid gap-4">
+              {softSkills.map((skill, index) => (
+                <SoftSkillCard 
+                  key={skill.name} 
+                  skill={skill} 
+                  isVisible={isVisible}
+                  delay={800 + (index * 100)}
+                />
               ))}
             </div>
           </div>
-          <div>
-            <h3 className="text-xl font-semibold mb-4">Soft Skills</h3>
-            <ul className="list-disc list-inside text-gray-700">
-              {softSkills.map(skill => (
-                <li key={skill}>{skill}</li>
-              ))}
-            </ul>
-          </div>
+        </div>
+
+        {/* Achievement Stats */}
+        <div className={`mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 transition-all duration-1000 transform ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+        }`} style={{ transitionDelay: '1000ms' }}>
+          {[
+            { number: '2+', label: 'Years Experience', icon: '📅' },
+            { number: '10+', label: 'Projects Completed', icon: '🚀' },
+            { number: '5+', label: 'Technologies Mastered', icon: '⚡' },
+            { number: '100%', label: 'Client Satisfaction', icon: '⭐' }
+          ].map((stat, index) => (
+            <div key={index} className="text-center bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="text-3xl mb-2">{stat.icon}</div>
+              <div className="text-2xl font-bold text-blue-600 mb-1">{stat.number}</div>
+              <div className="text-sm text-gray-600">{stat.label}</div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 };
 
-export default Skills; 
+export default Skills;
