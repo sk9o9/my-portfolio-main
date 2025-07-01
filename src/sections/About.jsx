@@ -129,7 +129,7 @@ const About = () => {
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="text-xl font-semibold text-gray-800">BSc (Hons) Computing</h4>
                           <span className="text-sm font-medium text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
-                            2022 - Present
+                            2022 - 2025
                           </span>
                         </div>
                         <p className="text-gray-700 mb-2">
@@ -139,6 +139,7 @@ const About = () => {
                           Focusing on software development, database systems, and modern web technologies
                         </p>
                       </div>
+                      
                     </div>
                   </div>
                 </div>
