@@ -10,6 +10,7 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [errors, setErrors] = useState({});
   const sectionRef = useRef(null);
 
   useEffect(() => {
@@ -34,19 +35,56 @@ const Contact = () => {
   }, []);
 
   const handleInputChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: ''
+      });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    
+    if (!formData.subject.trim()) {
+      newErrors.subject = 'Subject is required';
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = 'Message should be at least 10 characters long';
+    }
+    
+    return newErrors;
   };
 
   const handleSubmit = async () => {
-    // Basic validation
-    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-      alert('Please fill in all required fields');
+    const formErrors = validateForm();
+    
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
       return;
     }
     
+    setErrors({});
     setIsSubmitting(true);
     
     // Simulate form submission
@@ -271,9 +309,17 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 group-hover:border-blue-300"
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 group-hover:border-blue-300 ${
+                        errors.name ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                      }`}
                       placeholder="Your full name"
                     />
+                    {errors.name && (
+                      <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
+                        <span>⚠️</span>
+                        {errors.name}
+                      </p>
+                    )}
                   </div>
                   <div className="group">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -285,9 +331,17 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 group-hover:border-blue-300"
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 group-hover:border-blue-300 ${
+                        errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                      }`}
                       placeholder="your.email@example.com"
                     />
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
+                        <span>⚠️</span>
+                        {errors.email}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -301,9 +355,17 @@ const Contact = () => {
                     value={formData.subject}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 group-hover:border-blue-300"
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 group-hover:border-blue-300 ${
+                      errors.subject ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                    }`}
                     placeholder="What's this about?"
                   />
+                  {errors.subject && (
+                    <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
+                      <span>⚠️</span>
+                      {errors.subject}
+                    </p>
+                  )}
                 </div>
 
                 <div className="group">
@@ -316,9 +378,17 @@ const Contact = () => {
                     onChange={handleInputChange}
                     required
                     rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 group-hover:border-blue-300 resize-none"
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 group-hover:border-blue-300 resize-none ${
+                      errors.message ? 'border-red-500 bg-red-50' : 'border-gray-300'
+                    }`}
                     placeholder="Tell me about your project, ideas, or just say hello..."
                   />
+                  {errors.message && (
+                    <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
+                      <span>⚠️</span>
+                      {errors.message}
+                    </p>
+                  )}
                 </div>
 
                 <button
